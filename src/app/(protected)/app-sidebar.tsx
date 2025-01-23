@@ -2,7 +2,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Sidebar, SidebarMenu , SidebarContent, SidebarGroupContent, SidebarHeader, SidebarGroup, SidebarGroupLabel, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar'
+import { Sidebar, SidebarMenu , SidebarContent, SidebarGroupContent, SidebarHeader, SidebarGroup, SidebarGroupLabel, SidebarMenuItem, SidebarMenuButton, useSidebar } from '@/components/ui/sidebar'
 import { LayoutDashboard, Bot, Presentation, CreditCard , Plus} from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -43,10 +43,20 @@ const projects = [
 ]
 
 export function AppSidebar() {
-  const pathname = usePathname()
-  return (
+    const pathname = usePathname()
+    const {open} = useSidebar()
+    return (
     <Sidebar collapsible="icon" variant="floating">
-        <SidebarHeader>Logo</SidebarHeader>
+        <SidebarHeader>
+            <div className="flex items-center gap-2">
+                {open && (
+                    <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+                        DevInsights
+                    </h1>
+                )}
+
+            </div>
+        </SidebarHeader>
 
         <SidebarContent>
         {/* first sidebar group */}
@@ -98,22 +108,25 @@ export function AppSidebar() {
                     })}
                     <div className="h-2"></div>
                     
+                {open && (
                     <SidebarMenuItem>
-                        <Link href='create'>
+                        <Link href='/create'>
                             <Button size='sm' variant={'outline'} className="w-fit"> 
                                 <Plus />
                                 Create Project 
                             </Button>
                         </Link>
-
                     </SidebarMenuItem>
+                )}
+
+
                 </SidebarMenu>
             </SidebarGroupContent>
         </SidebarGroup>
 
 
 
-      </SidebarContent>
+        </SidebarContent>
     </Sidebar>
   )
 }

@@ -17,6 +17,19 @@ model User {
     imageUrl   String?
     firstName   String?
     lastName    String?
+
     emailAddress String  @unique
+
     credits     Int      @default(450) //default credits for how any files allowed in a repo
+}
+
+model Project {
+    id String @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    name String
+    githubUrl String
+
+    deletedAt DateTime?
 }
