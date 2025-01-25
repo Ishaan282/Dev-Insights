@@ -1,4 +1,5 @@
 //they are gonna be redircted here once they sign-up
+//after this going to the dashboard
 
 import React  from 'react';
 import { db } from '@/server/db';

@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import { Toaster } from "sonner";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
@@ -15,10 +16,14 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
+    //the top bar 
     <ClerkProvider>
+
+    {/* the main part */}
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
         <TRPCReactProvider>{children}</TRPCReactProvider>
+        <Toaster richColors/> 
       </body>
     </html>
     </ClerkProvider> //this is using the middleware to protect the routes
