@@ -11,7 +11,7 @@ const model = genAI.getGenerativeModel({
     model: 'gemini-1.5-flash'
 });
 
-export const summariseCommit = async (diff: string) => {
+export const aisummariseCommit = async (diff: string) => {
     // https://github.com/<owner>/<repo>/commit/<commitHash>.diff
     const response = await model.generateContent([
         `
@@ -48,12 +48,12 @@ export const summariseCommit = async (diff: string) => {
 }
 
 //testing
-console.log(await summariseCommit(
+console.log(await aisummariseCommit(
     `
     diff --git a/Samiksha/decision_Tree.ipynb b/Samiksha/decision_Tree.py
 similarity index 100%
 rename from Samiksha/decision_Tree.ipynb
 rename to Samiksha/decision_Tree.py
     `
-
 ));
+//run this file and you will the response from ai 

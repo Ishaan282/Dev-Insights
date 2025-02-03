@@ -5,6 +5,7 @@ import { SidebarHeader } from '@/components/ui/sidebar'
 import useProject from '@/hooks/use-project'
 import { ExternalLink, Github } from 'lucide-react'
 import Link from 'next/link'
+import CommitLog from './commit-log'
 const DashboardPage = () => {
     const {project} = useProject();
     return (
@@ -48,7 +49,7 @@ const DashboardPage = () => {
 
             <div className="mt-8"></div>
 
-            commitLog
+            <CommitLog />
         </div>
     )
 }

@@ -1,8 +1,9 @@
 import { z } from 'zod';
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc';
+import { pollCommits } from '@/lib/github';
 
 export const projectRouter = createTRPCRouter({
-    //route 1
+    //route 1 - for creating a project
     createProject: protectedProcedure.input(
         z.object({
             name: z.string(),
@@ -21,9 +22,10 @@ export const projectRouter = createTRPCRouter({
                 }
             }
         })
+        await pollCommits(project.id);
         return project
     }),
-    //route 2
+    //route 2 - for getting all projects
     getProjects: protectedProcedure.query(async ({ctx}) => {
         return await ctx.db.project.findMany({
             where: {
@@ -35,6 +37,14 @@ export const projectRouter = createTRPCRouter({
                 deletedAt: null //if deleted at is null then only show the project
             } //getting all projects of the user
         })
+    }),
+
+    //route 3 - for getting commits
+    getCommits: protectedProcedure.input(z.object({
+        projectId: z.string()
+    })).query(async ({ctx, input}) => {
+        pollCommits(input.projectId).then().catch(console.error);
+        return await ctx.db.commit.findMany({where : {projectId : input.projectId}})
     })
 
 }) //we create this router to have communication with frontend
