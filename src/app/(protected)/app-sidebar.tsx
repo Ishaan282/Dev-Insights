@@ -7,38 +7,32 @@ import { LayoutDashboard, Bot, Presentation, CreditCard , Plus} from 'lucide-rea
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import useProject from '@/hooks/use-project'
-
+//! this is the sidebar for the application
 const items = [
-  {
+{
     title: 'Dashboard',
     url: '/dashboard',
-    icon: LayoutDashboard,
-  },
-  {
+    icon: LayoutDashboard,},
+{
     title: 'Q&A',
     url: '/qa',
-    icon: Bot,
-  },
-  {
+    icon: Bot,},
+{
     title: 'Meetings',
     url: '/meetings',
-    icon: Presentation,
-  },
-  {
+    icon: Presentation,},
+{
     title: 'Billing',
     url: '/billing',
-    icon: CreditCard,
-  },
+    icon: CreditCard,},
 ]
-
-
 
 export function AppSidebar() {
     const pathname = usePathname()
     const {open} = useSidebar()
     const {projects, projectId , setProjectId} = useProject();
     return (
-    <Sidebar collapsible="icon" variant="floating">
+    <Sidebar collapsible="icon" variant="floating" > {/*transition duration*/}
         <SidebarHeader>
             <div className="flex items-center gap-2">
                 {open && (
@@ -50,27 +44,27 @@ export function AppSidebar() {
             </div>
         </SidebarHeader>
 
-        <SidebarContent>
+        <SidebarContent >
         {/* first sidebar group */}
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-                {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                    <Link href={item.url} className={cn(
-                        pathname === item.url ? '!bg-primary !text-white' : ''
-                        )}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                    </Link>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-                ))}
-            </SidebarMenu>
+        <SidebarGroupLabel>Application</SidebarGroupLabel>
+            <SidebarGroupContent>
+                <SidebarMenu>
+                    {items.map((item) => (
+                    <SidebarMenuItem key={item.title}>
+                        <SidebarMenuButton asChild>
+                        <Link href={item.url} className={cn(
+                            pathname === item.url ? '!bg-primary !text-white' : ''
+                            )}>
+                            <item.icon />
+                            <span>{item.title}</span>
+                        </Link>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    ))}
+                </SidebarMenu>
 
-          </SidebarGroupContent>
+            </SidebarGroupContent>
         </SidebarGroup>
 
         {/* second sidebar group */}
@@ -86,7 +80,7 @@ export function AppSidebar() {
                                         setProjectId(project.id)
                                     }}>
                                         <div className={cn(
-                                            "rounded-sm border size-6 flex items-center justify-center text-sm bg-white text-primary",
+                                            "rounded-sm border size-6 flex items-center justify-center text-sm bg-white text-primary w-5 h-5 min-w-5 min-h-5",
                                             {
                                                 // 'bg-black border-primary text-white': true
                                                 'bg-black border-primary text-white' : project.id === projectId  //if the project id is equal to the project id then it will be selected
@@ -117,8 +111,6 @@ export function AppSidebar() {
                 </SidebarMenu>
             </SidebarGroupContent>
         </SidebarGroup>
-
-
 
         </SidebarContent>
     </Sidebar>

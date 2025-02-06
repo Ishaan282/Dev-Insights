@@ -18,21 +18,21 @@ export const aisummariseCommit = async (diff: string) => {
         You are an expert programmer tasked with summarizing a git diff file.
         ### Key Points to Remember:
         1. A git diff format includes metadata and line changes for modified files.
-           Example metadata:
-           \`\`\`
-           diff --git a/file/path b/file/path
-           index <hash>..<hash> <file permissions>
-           --- a/file/path
-           +++ b/file/path
-           \`\`\`
+            Example metadata:
+            \`\`\`
+            diff --git a/file/path b/file/path
+            index <hash>..<hash> <file permissions>
+            --- a/file/path
+            +++ b/file/path
+            \`\`\`
         2. Line changes:
            - Lines starting with \`+\` were **added**.
            - Lines starting with \`-\` were **deleted**.
            - Lines starting with neither \`+\` nor \`-\` are for **context**.
         3. Summaries should:
-           - Be concise but specific.
-           - Include file names or general descriptions of the changes.
-           - Avoid overly broad descriptions like "Updated code."
+            - Be concise but specific.
+            - Include file names or general descriptions of the changes.
+            - Avoid overly broad descriptions like "Updated code."
 
         ### Example Summaries:
         - Increased the max retry attempts to 5 [lib/retry.js].
@@ -48,12 +48,12 @@ export const aisummariseCommit = async (diff: string) => {
 }
 
 //testing
-console.log(await aisummariseCommit(
-    `
-    diff --git a/Samiksha/decision_Tree.ipynb b/Samiksha/decision_Tree.py
-similarity index 100%
-rename from Samiksha/decision_Tree.ipynb
-rename to Samiksha/decision_Tree.py
-    `
-));
+// console.log(await aisummariseCommit(
+//     `
+//     diff --git a/Samiksha/decision_Tree.ipynb b/Samiksha/decision_Tree.py
+// similarity index 100%
+// rename from Samiksha/decision_Tree.ipynb
+// rename to Samiksha/decision_Tree.py
+//     `
+// ));
 //run this file and you will the response from ai 

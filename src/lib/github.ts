@@ -3,11 +3,11 @@ import { db } from '@/server/db';
 import { Octokit} from 'octokit';
 import axios from 'axios';
 import { aisummariseCommit } from './gemini';
-
+//!this file is to get the commits from the github repository
+    //#we are only returning the first 10 commits to avoid the load on the server
 export const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN
 }); //passing github token 
-//this file is to get the commits from the github repository
 // const githubUrl = 'https://github.com/docker/genai-stack' //url of the repository
 
 type Response = {
