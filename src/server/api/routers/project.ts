@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc';
 import { pollCommits } from '@/lib/github';
+import { indexGithubRepo } from '@/lib/github-loader';
 
 export const projectRouter = createTRPCRouter({
     //route 1 - for creating a project
@@ -22,6 +23,7 @@ export const projectRouter = createTRPCRouter({
                 }
             }
         })
+        await indexGithubRepo(project.id, input.githubUrl, input.githubToken);
         await pollCommits(project.id);
         return project
     }),
@@ -45,6 +47,24 @@ export const projectRouter = createTRPCRouter({
     })).query(async ({ctx, input}) => {
         pollCommits(input.projectId).then().catch(console.error); 
         return await ctx.db.commit.findMany({where : {projectId : input.projectId}})
-    })
+    }),
 
+    //route 4
+    saveAnswer: protectedProcedure.input(z.object({
+        projectId: z.string(),
+        question: z.string(),
+        answer: z.string(),
+        filesReferences: z.any()
+    })).mutation(async ({ctx, input}) => {
+        return await ctx.db.question.create({
+            data: {
+                answer: input.answer,
+                filesReferences: input.filesReferences,
+                projectId: input.projectId,
+                question: input.question,
+                userId: ctx.user.userId! //$we ! sign for non-null assertion
+
+            }
+        })
+    }),
 }) //we create this router to have communication with frontend

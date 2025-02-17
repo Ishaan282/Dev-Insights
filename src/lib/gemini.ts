@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { Document } from '@langchain/core/documents'
 
 const apiKey = process.env.GEMINI_API_KEY;
 
@@ -47,7 +48,7 @@ export const aisummariseCommit = async (diff: string) => {
     return response.response.text();
 }
 
-//testing
+//#testing function to get ai response
 // console.log(await aisummariseCommit(
 //     `
 //     diff --git a/Samiksha/decision_Tree.ipynb b/Samiksha/decision_Tree.py
@@ -56,4 +57,54 @@ export const aisummariseCommit = async (diff: string) => {
 // rename to Samiksha/decision_Tree.py
 //     `
 // ));
-//run this file and you will the response from ai 
+
+
+//!funciton to pass the code to ai
+export async function summariseCode(doc: Document){
+    console.log("getting summary for", doc.metadata.source);
+    try {
+        const code = doc.pageContent.slice(0, 10000); //limit the file to 10k characters
+        const response = await model.generateContent([
+            `
+            You are a senior software engineer specializing in onboarding junior developers.  
+            Your task is to help a junior engineer understand the purpose and functionality of the file: "${doc.metadata.source}".  
+    
+            Below is the code from the file:  
+            ---  
+            ${code}  
+            ---  
+    
+            **Task:**  
+            Summarize the purpose and functionality of this file in simple, clear terms.  
+            Your summary should:  
+            1. Explain the file's role in the project.  
+            2. Highlight its key functions or components.  
+            3. Mention any important dependencies (if applicable).  
+            4. Keep it concise (preferably under 150 words, but expand slightly if necessary for clarity).   
+    
+            Provide a clear, structured response.
+            `
+        ]);
+    
+        return response.response.text();
+
+    } catch(error){
+        return ''
+    }
+
+
+
+}
+
+//!generating embaddings 
+//we generate the embedding of files using ai so when someone asks a question gemini wil look into embaddings 
+export async function generateEmbedding(summary: string){
+    const model = genAI.getGenerativeModel({
+        model: "text-embedding-004"
+    })
+    const result = await model.embedContent(summary) //generating summary embeddings
+    const embedding = result.embedding
+    return embedding.values
+}
+
+//console.log(await generateEmbedding("hello world")); //#testing the function 

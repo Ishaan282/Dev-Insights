@@ -3,11 +3,13 @@
 
 generator client {
     provider = "prisma-client-js"
+    previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
     provider = "postgresql"
     url      = env("DATABASE_URL")
+    extensions = [vector] //importing the vector extension
 }
 
 model User {
@@ -23,6 +25,7 @@ model User {
     credits     Int      @default(450) //default credits for how any files allowed in a repo
 
     userToProjects UserToProject[]
+    questionsAsked Question[]
 }
 
 model Project {
@@ -35,8 +38,11 @@ model Project {
 
     deletedAt       DateTime?
 
+//putting relations
     userToProjects  UserToProject[]
     commits         Commit[]
+    sourceCodeEmbeddings SourceCodeEmbedding[]
+    savedQuestions Question[]
 }
 
 
@@ -55,6 +61,38 @@ model UserToProject{
     @@unique([userId, projectId])
 }
 
+model SourceCodeEmbedding{ //model to store the embeddings of the source code
+    id                  String @id @default(cuid())
+
+    summaryEmbedding    Unsupported("vector(768)")? //embedding of the summary , 769 is dimention of the embedding
+    //768 because of the gemini model
+    sourceCode          String
+    fileName            String
+    summary             String
+
+    projectId           String
+    project             Project @relation(fields: [projectId], references: [id])
+}
+
+//model to save question 
+model Question{
+    id String @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    question String
+    answer String
+
+    filesReferences Json? //stroing the file referecnes 
+
+    projectId String
+    project Project @relation(fields: [projectId], references: [id])
+
+    userId String
+    user User @relation(fields: [userId], references: [id])
+}
+
+
 //model to store commits 
 model Commit{
     id                  String @id @default(cuid())
@@ -72,4 +110,13 @@ model Commit{
 
     //ai summary
     summary             String
+}
+
+
+//added this here to fix the error with src\server\api\routers\post.ts
+model Post {
+    id        String   @id @default(cuid())
+    name      String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
