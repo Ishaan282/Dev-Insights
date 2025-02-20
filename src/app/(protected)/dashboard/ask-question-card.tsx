@@ -11,6 +11,7 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { askQuestion } from "./actions";
 import { readStreamableValue } from "ai/rsc";
 import CodeReferences from "./code-references";
+import { api } from "@/trpc/react";
 
 const AskQuestionCard = () => {
     const {project} = useProject();
@@ -19,6 +20,7 @@ const AskQuestionCard = () => {
     const [loading, setLoading] = React.useState(false)
     const [filesReferences, setFilesReferences] = React.useState<{fileName: string; sourceCode: string; summary: string }[]>([])
     const[answer , setAnswer] = React.useState('')
+    const saveAnswer = api.project.saveAnswer.useMutation()
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         setAnswer('')
@@ -45,16 +47,24 @@ const AskQuestionCard = () => {
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent className="sm:max-w-[80vw]">
                     <DialogHeader>
-                        <DialogTitle>
-                            'Logo'
-                        </DialogTitle>
+                        <div className="flex items-center gap-2">
+                            {/* <DialogTitle>
+                                'Logo'
+                            </DialogTitle> */}
+
+                            {/* <Button variant={'outline'}>
+                                Save answer
+                            </Button> */}
+                        </div>
                     </DialogHeader>
 
                     <MDEditor.Markdown source = {answer} className="max-w-[70vw] !h-full max-h-[40vh] overflow-scroll"/>
                     <div className="h-4"></div>
                     <CodeReferences filesReferences={filesReferences}/>
 
-                    <Button type="button" onClick={() => {setOpen(false)}}></Button>
+                    <Button type="button" onClick={() => {setOpen(false)}}>
+                        Close
+                    </Button>
                 </DialogContent>
             </Dialog>
 
