@@ -12,6 +12,7 @@ import { askQuestion } from "./actions";
 import { readStreamableValue } from "ai/rsc";
 import CodeReferences from "./code-references";
 import { api } from "@/trpc/react";
+import { toast } from "sonner";
 
 const AskQuestionCard = () => {
     const {project} = useProject();
@@ -52,13 +53,26 @@ const AskQuestionCard = () => {
                                 'Logo'
                             </DialogTitle> */}
 
-                            {/* <Button variant={'outline'}>
+                            <Button disabled={saveAnswer.isPending} variant={'outline'} onClick={() =>{ 
+                                saveAnswer.mutate({
+                                    projectId: project!.id,
+                                    question,
+                                    answer,
+                                    filesReferences
+                                }) , {
+                                    onSuccess:() => {
+                                        toast.success('Answer saved') //this will show a little message that it's savevd
+                                    }, onError:() => {
+                                        toast.error('Error saving answer')
+                                    }
+                                }
+                            }}>
                                 Save answer
-                            </Button> */}
+                            </Button>
                         </div>
                     </DialogHeader>
 
-                    <MDEditor.Markdown source = {answer} className="max-w-[70vw] !h-full max-h-[40vh] overflow-scroll"/>
+                    <MDEditor.Markdown source = {answer} className='max-w-[70vw] !h-full max-h-[40vh] overflow-scroll'/>
                     <div className="h-4"></div>
                     <CodeReferences filesReferences={filesReferences}/>
 

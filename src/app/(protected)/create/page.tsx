@@ -15,8 +15,8 @@ type FormInput = {
 
 const CreatePage = () => {
     const {register , handleSubmit , reset } = useForm<FormInput>()
-    const createProject = api.project.createProject.useMutation()
-    const refetch = useRefetch() 
+    const createProject = api.project.createProject.useMutation() //an variable to call the route
+    const refetch = useRefetch() //this will refresh the window to load new data
     //.project came from root.ts
 
     function onSubmit(data: FormInput) {
@@ -37,7 +37,8 @@ const CreatePage = () => {
         })
         return true;
     }
-  return (
+
+return (
     <div className="flex items-center gap-12 h-full justify-center">
         <img src="/undraw_github.svg" alt="" className='h-56 w-auto'/>
         <div>
@@ -72,7 +73,7 @@ const CreatePage = () => {
                         <div className="h-4"></div>
                         <Button type='submit' disabled={createProject.isPending}>
                             Create Project
-                        </Button>
+                        </Button>  {/* passing the data to createProject */}
                     </form>
                 </div>
             </div>

@@ -17,14 +17,14 @@ const items = [
     title: 'Q&A',
     url: '/qa',
     icon: Bot,},
-{
-    title: 'Meetings',
-    url: '/meetings',
-    icon: Presentation,},
-{
-    title: 'Billing',
-    url: '/billing',
-    icon: CreditCard,},
+// {
+//     title: 'Meetings',
+//     url: '/meetings',
+//     icon: Presentation,},
+// {
+//     title: 'Billing',
+//     url: '/billing',
+//     icon: CreditCard,},
 ]
 
 export function AppSidebar() {
@@ -32,6 +32,7 @@ export function AppSidebar() {
     const {open} = useSidebar()
     const {projects, projectId , setProjectId} = useProject();
     return (
+        //! logo
     <Sidebar collapsible="icon" variant="floating" > {/*transition duration*/}
         <SidebarHeader>
             <div className="flex items-center gap-2">
@@ -44,6 +45,7 @@ export function AppSidebar() {
             </div>
         </SidebarHeader>
 
+        {/* //! sidebar content */}
         <SidebarContent >
         {/* first sidebar group */}
         <SidebarGroup>
@@ -71,6 +73,7 @@ export function AppSidebar() {
         <SidebarGroup>
             <SidebarGroupLabel>Your Projects</SidebarGroupLabel>
             <SidebarGroupContent>
+                {/*$ rendering the projects from backend  */}
                 <SidebarMenu>
                     {projects?.map(project => {
                         return (
@@ -83,10 +86,10 @@ export function AppSidebar() {
                                             "rounded-sm border size-6 flex items-center justify-center text-sm bg-white text-primary w-5 h-5 min-w-5 min-h-5",
                                             {
                                                 // 'bg-black border-primary text-white': true
-                                                'bg-black border-primary text-white' : project.id === projectId  //if the project id is equal to the project id then it will be selected
+                                                'bg-black border-primary text-white' : project.id === projectId  //if the project.id is selected then show the selected project
                                             }
                                         )}>
-                                            {project.name.charAt(0)}
+                                            {project.name.charAt(0)} 
                                         </div>
                                         <span>{project.name}</span>
                                     </div>
@@ -114,5 +117,5 @@ export function AppSidebar() {
 
         </SidebarContent>
     </Sidebar>
-  )
+    )
 }

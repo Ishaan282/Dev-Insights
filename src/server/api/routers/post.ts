@@ -1,5 +1,5 @@
 import { z } from "zod";
-
+//this file contains backend api routes and procedures
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 
 export const postRouter = createTRPCRouter({

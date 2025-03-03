@@ -1,3 +1,4 @@
+//THis files is like main.tsx in react and it exports all the routes 
 import { postRouter } from "@/server/api/routers/post";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 import { projectRouter } from "./routers/project";
@@ -15,11 +16,5 @@ export const appRouter = createTRPCRouter({
 // export type definition of API
 export type AppRouter = typeof appRouter;
 
-/**
- * Create a server-side caller for the tRPC API.
- * @example
- * const trpc = createCaller(createContext);
- * const res = await trpc.post.all();
- *       ^? Post[]
- */
+
 export const createCaller = createCallerFactory(appRouter);

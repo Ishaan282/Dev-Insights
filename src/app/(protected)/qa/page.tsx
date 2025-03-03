@@ -2,7 +2,7 @@ import React from 'react'
 
 const QApage = () => {
   return (
-    <div>QApage</div>
+    <div className='text-center'>Comming Soon!</div>
   )
 }
 

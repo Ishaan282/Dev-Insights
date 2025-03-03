@@ -1,12 +1,12 @@
 'use client' //this makes it client side compatible
 import React from 'react'
-import { useUser} from '@clerk/nextjs'
-import { SidebarHeader } from '@/components/ui/sidebar'
+
 import useProject from '@/hooks/use-project'
 import { ExternalLink, Github } from 'lucide-react'
 import Link from 'next/link'
 import CommitLog from './commit-log'
 import AskQuestionCard from './ask-question-card'
+
 const DashboardPage = () => {
     const {project} = useProject();
     return (
@@ -21,6 +21,7 @@ const DashboardPage = () => {
                             <p className="text-sm font-medium text-white">
                                 This project is liked to {''}
                                 <Link href={project?.githubUrl ?? ""} className='inline-flex item-center text-white/80'>
+
                                     {project?.githubUrl }
                                     <ExternalLink className="ml-1 size-4"></ExternalLink>
 
@@ -32,12 +33,12 @@ const DashboardPage = () => {
                 </div>
                 <div className="h-4"></div>
 
-                <div className="flex items-center gap-4">
+                {/* <div className="flex items-center gap-4"> */}
                     {/* team members */}
-                    TeamMembres
-                    InviteBUtton
-                    AechiveButton
-                </div>
+                    {/* TeamMembres */}
+                    {/* InviteBUtton */}
+                    {/* AechiveButton */}
+                {/* </div> */}
 
 
             </div>
@@ -45,7 +46,7 @@ const DashboardPage = () => {
             <div className="mt-4">
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">
                     <AskQuestionCard/>
-                    MeetingCard
+                    {/* MeetingCard */}
                 </div>
             </div>
 
