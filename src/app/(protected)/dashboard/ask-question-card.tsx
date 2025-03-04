@@ -49,9 +49,9 @@ const AskQuestionCard = () => {
                 <DialogContent className="sm:max-w-[80vw]">
                     <DialogHeader>
                         <div className="flex items-center gap-2">
-                            {/* <DialogTitle>
-                                'Logo'
-                            </DialogTitle> */}
+                            <DialogTitle>
+                                ''
+                            </DialogTitle>
 
                             <Button disabled={saveAnswer.isPending} variant={'outline'} onClick={() =>{ 
                                 saveAnswer.mutate({
@@ -72,7 +72,7 @@ const AskQuestionCard = () => {
                         </div>
                     </DialogHeader>
 
-                    <MDEditor.Markdown source = {answer} className='max-w-[70vw] !h-full max-h-[40vh] overflow-scroll'/>
+                    <MDEditor.Markdown source = {answer} className='max-w-[70vw] !h-full max-h-[30vh] overflow-scroll'/>
                     <div className="h-4"></div>
                     <CodeReferences filesReferences={filesReferences}/>
 

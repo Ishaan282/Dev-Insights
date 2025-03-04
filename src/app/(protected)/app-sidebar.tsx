@@ -45,7 +45,7 @@ export function AppSidebar() {
             </div>
         </SidebarHeader>
 
-        {/* //! sidebar content */}
+    
         <SidebarContent >
         {/* first sidebar group */}
         <SidebarGroup>

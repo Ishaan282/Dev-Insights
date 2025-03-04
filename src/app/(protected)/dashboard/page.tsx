@@ -33,12 +33,12 @@ const DashboardPage = () => {
                 </div>
                 <div className="h-4"></div>
 
-                {/* <div className="flex items-center gap-4"> */}
+                <div className="flex items-center gap-4">
                     {/* team members */}
-                    {/* TeamMembres */}
-                    {/* InviteBUtton */}
-                    {/* AechiveButton */}
-                {/* </div> */}
+                    TeamMembres
+                    InviteBUtton
+                    AechiveButton
+                </div>
 
 
             </div>
@@ -46,7 +46,7 @@ const DashboardPage = () => {
             <div className="mt-4">
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-5">
                     <AskQuestionCard/>
-                    {/* MeetingCard */}
+                    MeetingCard
                 </div>
             </div>
 
