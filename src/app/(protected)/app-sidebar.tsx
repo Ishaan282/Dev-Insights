@@ -17,10 +17,10 @@ const items = [
     title: 'Q&A',
     url: '/qa',
     icon: Bot,},
-// {
-//     title: 'Meetings',
-//     url: '/meetings',
-//     icon: Presentation,},
+{
+    title: 'Meetings',
+    url: '/meetings',
+    icon: Presentation,},
 // {
 //     title: 'Billing',
 //     url: '/billing',
