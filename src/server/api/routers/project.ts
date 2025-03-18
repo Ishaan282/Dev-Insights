@@ -27,6 +27,7 @@ export const projectRouter = createTRPCRouter({
         await pollCommits(project.id);
         return project
     }),
+    
     //route 2 - for getting all projects
     getProjects: protectedProcedure.query(async ({ctx}) => {
         return await ctx.db.project.findMany({
@@ -67,4 +68,20 @@ export const projectRouter = createTRPCRouter({
             }
         })
     }),
+
+    //route 5
+    getQuestions: protectedProcedure.input(z.object({projectId:z.string()}))
+    .query(async ({ctx,input}) => {
+        return await ctx.db.question.findMany({
+            where: {
+                projectId: input.projectId
+            }, 
+            include : {
+                user: true
+            },
+            orderBy:{
+                createdAt: 'desc'
+            }
+        })
+    })
 }) //we create this router to have communication with frontend

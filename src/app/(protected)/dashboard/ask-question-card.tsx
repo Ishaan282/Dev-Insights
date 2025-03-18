@@ -13,6 +13,7 @@ import { readStreamableValue } from "ai/rsc";
 import CodeReferences from "./code-references";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
+import useRefetch from "@/hooks/use-refetch";
 
 const AskQuestionCard = () => {
     const {project} = useProject();
@@ -42,6 +43,7 @@ const AskQuestionCard = () => {
         }
         setLoading(false)
     }
+    const refetch = useRefetch()
 
     return (
         <>
@@ -62,6 +64,7 @@ const AskQuestionCard = () => {
                                 }) , {
                                     onSuccess:() => {
                                         toast.success('Answer saved') //this will show a little message that it's savevd
+                                        refetch()
                                     }, onError:() => {
                                         toast.error('Error saving answer')
                                     }
@@ -72,7 +75,12 @@ const AskQuestionCard = () => {
                         </div>
                     </DialogHeader>
 
-                    <MDEditor.Markdown source = {answer} className='max-w-[70vw] !h-full max-h-[30vh] overflow-scroll'/>
+                    <MDEditor.Markdown source = {answer} className='max-w-[70vw] !h-full max-h-[30vh] overflow-y-scroll bg-white p-4 rounded-md'/>
+                    {/* <MDEditor.Markdown
+                        source={answer}
+                        className='max-w-[70vw] !h-full max-h-[30vh] overflow-y-scroll p-4 rounded-md'
+                        style={{ backgroundColor: 'white', color: 'black' }}
+                    /> */}
                     <div className="h-4"></div>
                     <CodeReferences filesReferences={filesReferences}/>
 
