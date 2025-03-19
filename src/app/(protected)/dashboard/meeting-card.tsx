@@ -5,6 +5,7 @@ import { uploadFile } from '@/lib/firebase'
 import { Presentation, Upload } from 'lucide-react'
 import React from 'react'
 import { useDropzone } from 'react-dropzone'
+import {CircularProgressbar, buildStyles} from 'react-circular-progressbar' //it's used to show the progress of the upload
 
 const MeetingCard = () => {
     const [isUploading, setIsUploading] = React.useState(false)
@@ -20,12 +21,14 @@ const MeetingCard = () => {
             console.log(acceptedFiles);
             const file = acceptedFiles[0]
             const downloadURL = await uploadFile(file as File,setProgress) //as File because we are passing a file to firebase
+            window.alert(downloadURL)
             setIsUploading(false)
         }
     }) //getting audio file input
 
     return (
         <Card className='col-span-2 flex flex-col items-center justify-center p-10' {...getRootProps()}>
+            {/* if not uploading */}
             {!isUploading && ( 
                 // if nothing is uploading then show this 
                 <>
@@ -47,6 +50,22 @@ const MeetingCard = () => {
                     </div>
                 </>
             )}
+            {/* if uploading */}
+            {isUploading && (
+                // <div className='flex items-center justify-center'>
+                <div className=''>
+                    <CircularProgressbar value={progress} text={`${progress}%`} className='size-20' styles={
+                        buildStyles({
+                            pathColor: '#000',
+                            textColor: '#000',
+                            trailColor: '#d6d6d6',
+                        })
+                    }/>
+                    <p className="text-sm text-gray-500 text-center">Uploading your meeting...</p>
+                </div>
+            )}
+
+            
         </Card>
     )
 }

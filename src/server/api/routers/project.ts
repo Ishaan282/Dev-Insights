@@ -70,7 +70,7 @@ export const projectRouter = createTRPCRouter({
     }),
 
     //route 5
-    getQuestions: protectedProcedure.input(z.object({projectId:z.string()}))
+    getQuestions: protectedProcedure.input(z.object({ projectId: z.string() }))
     .query(async ({ctx,input}) => {
         return await ctx.db.question.findMany({
             where: {
@@ -83,5 +83,23 @@ export const projectRouter = createTRPCRouter({
                 createdAt: 'desc'
             }
         })
-    })
+    }),
+//!meeting routes (not completed due to firebase )
+
+
+    // getMeetings: protectedProcedure.input(z.object({ projectId: z.string()})).query(async ({ctx, input}) => {
+    //     return await ctx.db.meeting.findMany({where: {id: input.projectId}, include: {issues: true}})
+    // }),
+    // deleteMeeting: protectedProcedure.input(z.object({ meetingId: z.string()})).query(async ({ctx, input}) => {
+    //     return await ctx.db.meeting.delete({where: {id: input.meetingId}})
+    // }),
+    // getMeetingById: protectedProcedure.input(z.object({ meetingId: z.string()})).query(async ({ctx, input}) => {
+    //     return await ctx.db.meeting.findUnique({where: {id: input.meetingId}, include: {issues: true}})
+    // }),
+
+//! more routes 
+    //route 6
+    archiveProject: protectedProcedure.input(z.object({projectId:z.string()})).mutation(async ({ctx, input}) => {
+        return await ctx.db.project.update({ where: {id: input.projectId}, data: {deletedAt: new Date()}})
+    }) //this is gonna delete the project
 }) //we create this router to have communication with frontend
