@@ -7,6 +7,7 @@ import { LayoutDashboard, Bot, Presentation, CreditCard , Plus} from 'lucide-rea
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import useProject from '@/hooks/use-project'
+import { Trash2 } from "lucide-react";
 //! this is the sidebar for the application
 const items = [
 {
@@ -92,8 +93,11 @@ export function AppSidebar() {
                                             {project.name.charAt(0)} 
                                         </div>
                                         <span>{project.name}</span>
+
                                     </div>
                                 </SidebarMenuButton>
+
+                                
                             </SidebarMenuItem>
                         )
                     })}

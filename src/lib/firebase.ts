@@ -58,21 +58,34 @@ const supabaseUrl = 'https://qgszbbmplmcfexiwvwin.supabase.co'; // Your Supabase
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFnc3piYm1wbG1jZmV4aXd2d2luIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzOTY0OTQsImV4cCI6MjA1Nzk3MjQ5NH0.XnT3ShfLDNxXyCodyH2nUAbjqCg2cQZNzNgJAjLjgh0'; // Your Supabase anon/public key
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// File upload function
+export const storage = supabase.storage;
+
+// This function is gonna show how much file has been uploaded
 export async function uploadFile(file: File, setProgress?: (progress: number) => void): Promise<string> {
     return new Promise(async (resolve, reject) => {
         try {
-            const fileExt = file.name.split('.').pop(); // Get file extension
+            const fileExt = file.name.split('.').pop();
             const fileName = `${Math.random()}.${fileExt}`; // Generate a unique file name
-            const filePath = `${fileName}`; // File path in the bucket
+            const filePath = `${fileName}`;
+
+            // Simulate progress updates (Supabase doesn't natively support progress tracking)
+            let progress = 0;
+            const interval = setInterval(() => {
+                if (setProgress) {
+                    progress = Math.min(progress + 10, 100); // Simulate progress
+                    setProgress(progress);
+                }
+            }, 700); // Update progress every 300ms
 
             // Upload file to Supabase Storage
             const { data, error } = await supabase.storage
                 .from('uploadvid') // Your bucket name
                 .upload(filePath, file, {
-                    cacheControl: '3600', // Cache control for the file
-                    upsert: false, // Do not overwrite existing files
+                    cacheControl: '3600',
+                    upsert: false,
                 });
+
+            clearInterval(interval); // Stop the progress simulation
 
             if (error) {
                 reject(error);
@@ -85,7 +98,7 @@ export async function uploadFile(file: File, setProgress?: (progress: number) =>
                 resolve(publicUrlData.publicUrl);
             }
         } catch (error) {
-            console.error('Error uploading file:', error);
+            console.error(error);
             reject(error);
         }
     });

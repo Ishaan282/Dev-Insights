@@ -6,10 +6,17 @@ import { Presentation, Upload } from 'lucide-react'
 import React from 'react'
 import { useDropzone } from 'react-dropzone'
 import {CircularProgressbar, buildStyles} from 'react-circular-progressbar' //it's used to show the progress of the upload
+import { api } from '@/trpc/react'
+import useProject from '@/hooks/use-project'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation' //this is used to navigate to another page
 
 const MeetingCard = () => {
+    const { project } = useProject();
     const [isUploading, setIsUploading] = React.useState(false)
     const [progress, setProgress] = React.useState(0)
+    const router = useRouter()
+    const uploadMeeting = api.project.uploadMeeting.useMutation()
     const {getRootProps , getInputProps} =  useDropzone({
         accept: {
             'audio/*': ['.mp3', '.wav' , '.m4a']
@@ -17,11 +24,26 @@ const MeetingCard = () => {
         multiple: false,
         maxSize: 50_000_000, //50mb
         onDrop: async acceptedFiles => {
+            if (!project) return
             setIsUploading(true) //updating the state
-            console.log(acceptedFiles);
+            // console.log(acceptedFiles);
             const file = acceptedFiles[0]
-            const downloadURL = await uploadFile(file as File,setProgress) //as File because we are passing a file to firebase
-            window.alert(downloadURL)
+            if(!file) return
+            const downloadURL = await uploadFile(file as File,setProgress) as string //as File because we are passing a file to firebase
+            uploadMeeting.mutate({
+                projectId: project.id,
+                meetingUrl: downloadURL,
+                name: file.name
+            }, {
+                onSuccess: () => {
+                    toast.success("Meeting uploaded successfully")
+                    router.push('/meetings')
+                },
+                onError: () => {
+                    toast.error("Failed to upload meeting")
+                }
+            })
+            // window.alert(downloadURL)
             setIsUploading(false)
         }
     }) //getting audio file input
@@ -52,13 +74,13 @@ const MeetingCard = () => {
             )}
             {/* if uploading */}
             {isUploading && (
-                // <div className='flex items-center justify-center'>
-                <div className=''>
+                <div className='flex items-center justify-center'>
+                {/* <div> */}
                     <CircularProgressbar value={progress} text={`${progress}%`} className='size-20' styles={
                         buildStyles({
-                            pathColor: '#000',
-                            textColor: '#000',
-                            trailColor: '#d6d6d6',
+                            pathColor: '#10B981', // Green color for the progress bar
+                            textColor: '#10B981', // Green color for the text
+                            trailColor: '#D1FAE5', // Light green color for the trail
                         })
                     }/>
                     <p className="text-sm text-gray-500 text-center">Uploading your meeting...</p>

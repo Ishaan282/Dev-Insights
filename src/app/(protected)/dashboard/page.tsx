@@ -9,6 +9,7 @@ import AskQuestionCard from './ask-question-card'
 import MeetingCard from './meeting-card'
 import ArchiveButton from './archive-button'
 import InviteButton from './invite-button'
+// import DeleteButton from './delete-button'
 
 const DashboardPage = () => {
     const {project} = useProject();
@@ -41,6 +42,7 @@ const DashboardPage = () => {
                     TeamMembres
                     <InviteButton />
                     <ArchiveButton />
+                    {/* <DeleteButton /> */}
                 </div>
 
 

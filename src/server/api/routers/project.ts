@@ -85,11 +85,22 @@ export const projectRouter = createTRPCRouter({
         })
     }),
 //!meeting routes (not completed due to firebase )
+    uploadMeeting: protectedProcedure.input(z.object({projectId: z.string(), meetingUrl: z.string(), name: z.string()}))
+        .mutation(async({ctx, input}) => {
+            const meeting = await ctx.db.meeting.create({
+                data: {
+                    meetingUrl: input.meetingUrl,
+                    projectId: input.projectId,
+                    name: input.name,
+                    status: "PROCESSING"
+                }
+            })
+        }),
 
 
-    // getMeetings: protectedProcedure.input(z.object({ projectId: z.string()})).query(async ({ctx, input}) => {
-    //     return await ctx.db.meeting.findMany({where: {id: input.projectId}, include: {issues: true}})
-    // }),
+    getMeetings: protectedProcedure.input(z.object({ projectId: z.string()})).query(async ({ctx, input}) => {
+        return await ctx.db.meeting.findMany({where: {projectId: input.projectId}, include: {issues: true} })
+    }),
     // deleteMeeting: protectedProcedure.input(z.object({ meetingId: z.string()})).query(async ({ctx, input}) => {
     //     return await ctx.db.meeting.delete({where: {id: input.meetingId}})
     // }),
@@ -101,5 +112,26 @@ export const projectRouter = createTRPCRouter({
     //route 6
     archiveProject: protectedProcedure.input(z.object({projectId:z.string()})).mutation(async ({ctx, input}) => {
         return await ctx.db.project.update({ where: {id: input.projectId}, data: {deletedAt: new Date()}})
-    }) //this is gonna delete the project
+    }), //this is gonna delete the project
+
+//# delete project
+// deleteProject: protectedProcedure
+//     .input(z.object({ projectId: z.string() }))
+//     .mutation(async ({ ctx, input }) => {
+//         const { projectId } = input;
+
+//         try {
+//             const deletedProject = await ctx.db.project.delete({
+//                 where: { id: projectId },
+//             });
+//             return { success: true, deletedProject };
+//         } catch (error) {
+//             // Narrow down the type of `error` before accessing its properties
+//             if (error instanceof Error) {
+//                 throw new Error(`Failed to delete project: ${error.message}`);
+//             } else {
+//                 throw new Error(`Failed to delete project: An unknown error occurred`);
+//             }
+//         }
+//     }),
 }) //we create this router to have communication with frontend

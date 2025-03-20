@@ -6,9 +6,50 @@ import useProject from '@/hooks/use-project'
 import React from 'react'
 import { toast } from 'sonner'
 
+// const InviteButton = () => {
+//     const {projectId} = useProject();
+//     const [open, setOpen] = React.useState(false)
+//     return (
+//         <>
+//             <Dialog open={open} onOpenChange={setOpen}>
+//                 <DialogContent>
+//                     <DialogHeader>
+//                         <DialogTitle>Invite Team Members</DialogTitle>
+//                     </DialogHeader>
+//                     <p className="text-sm text-gray-500">
+//                         Ask them to copy and past this link
+//                     </p>
+//                     <Input 
+//                     // mt-4 mean margin top 4
+//                         className='mt-4'
+//                         readOnly
+//                         onClick={() => {
+//                             navigator.clipboard.writeText(`${window.location.origin}/join/${projectId}`);
+//                             toast.success("copied to clipboard");
+//                         }}
+//                         value={`${window.location.origin}/join/${projectId}`}
+//                     />
+//                 </DialogContent>
+//             </Dialog>
+//             <Button size='sm' onClick={() => setOpen(true)}>Invite Members</Button>
+//         </>
+//     )
+// }
+
+// export default InviteButton
+
+
 const InviteButton = () => {
     const {projectId} = useProject();
     const [open, setOpen] = React.useState(false)
+    const [inviteLink, setInviteLink] = React.useState('')
+
+    React.useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setInviteLink(`${window.location.origin}/join/${projectId}`)
+        }
+    }, [projectId])
+
     return (
         <>
             <Dialog open={open} onOpenChange={setOpen}>
@@ -17,17 +58,18 @@ const InviteButton = () => {
                         <DialogTitle>Invite Team Members</DialogTitle>
                     </DialogHeader>
                     <p className="text-sm text-gray-500">
-                        Ask them to copy and past this link
+                        Ask them to copy and paste this link
                     </p>
                     <Input 
-                    // mt-4 mean margin top 4
                         className='mt-4'
                         readOnly
                         onClick={() => {
-                            navigator.clipboard.writeText(`${window.location.origin}/join/${projectId}`);
-                            toast.success("copied to clipboard");
+                            if (typeof window !== 'undefined') {
+                                navigator.clipboard.writeText(inviteLink);
+                                toast.success("copied to clipboard");
+                            }
                         }}
-                        value={`${window.location.origin}/join/${projectId}`}
+                        value={inviteLink}
                     />
                 </DialogContent>
             </Dialog>
