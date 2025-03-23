@@ -38,7 +38,6 @@ const DashboardPage = () => {
                 <div className="h-4"></div>
 
                 <div className="flex items-center gap-4">
-                    {/* team members */}
                     TeamMembres
                     <InviteButton />
                     <ArchiveButton />

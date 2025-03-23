@@ -5,18 +5,22 @@ import React from 'react'
 import MeetingCard from '../dashboard/meeting-card';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
+import useRefetch from '@/hooks/use-refetch';
 
 const MeetingPage = () => {
     const {projectId} = useProject();
     const {data: meetings , isLoading} = api.project.getMeetings.useQuery({projectId} , {
         refetchInterval: 4000 //this is goona check if meeting has been uploaded
     })
+    const deleteMeeting = api.project.deleteMeeting.useMutation(); //calling the route 
+    const refetch = useRefetch();
     return (
         <>
             <MeetingCard />
-            <h1 className="text-xl font-semibold">
-                Meetings
-            </h1>
+            <div className="h-6"></div>
+            <h1 className="text-xl font-semibold">Meetings</h1>
             {meetings && meetings.length === 0 && <div>No Meeting found</div>}
             {isLoading && <div>Loading...</div>}
             <ul className="divide-y divide-gray-200">
@@ -39,11 +43,25 @@ const MeetingPage = () => {
                                 <p className="whitespace-nowrap">
                                     {meeting.createdAt.toLocaleDateString()}
                                 </p>
-                                <p className="truncate">
-                                    {meeting.issues.length} issues
-                                </p>
+                                <p className="truncate">{meeting.issues.length} issues </p>
                                 {/* 3:43 */}
                             </div>
+                        </div> 
+
+                        <div className="flex items-center flex-none gap-x-4">
+                            <Link href={`/meetings/${meeting.id}`}>
+                                <Button size='sm' variant='outline'>
+                                    View meeting
+                                </Button>
+                            </Link>
+                            <Button disabled={deleteMeeting.isPending} size='sm' variant='destructive' onClick={() => deleteMeeting.mutate({meetingId: meeting.id}, {
+                                onSuccess: () => {
+                                    toast.success("Meeting deleted successfully")
+                                    refetch()
+                                }
+                            })}>
+                                Delete Meeting
+                            </Button>
                         </div>
                     </li>
                 ))}
