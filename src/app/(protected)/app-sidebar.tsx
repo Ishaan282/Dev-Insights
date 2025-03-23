@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Sidebar, SidebarMenu , SidebarContent, SidebarGroupContent, SidebarHeader, SidebarGroup, SidebarGroupLabel, SidebarMenuItem, SidebarMenuButton, useSidebar } from '@/components/ui/sidebar'
@@ -8,6 +8,8 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import useProject from '@/hooks/use-project'
 import { Trash2 } from "lucide-react";
+import { useRouter } from 'next/navigation';
+import router from 'next/router'
 //! this is the sidebar for the application
 const items = [
 {
@@ -32,6 +34,15 @@ export function AppSidebar() {
     const pathname = usePathname()
     const {open} = useSidebar()
     const {projects, projectId , setProjectId} = useProject();
+
+    useEffect(() => {
+        // Check if there are no projects and the user is not on the /create route
+        if (projects && projects.length === 0 && pathname !== '/create') {
+            router.push('/create'); //# Redirect to /create
+        }
+    }, [projects, pathname, router]);
+
+
     return (
         //! logo
     <Sidebar collapsible="icon" variant="floating" > {/*transition duration*/}

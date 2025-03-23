@@ -61,7 +61,7 @@ const InviteButton = () => {
                         Ask them to copy and paste this link
                     </p>
                     <Input 
-                        className='mt-4'
+                        className='mt-4 cursor-pointer'
                         readOnly
                         onClick={() => {
                             if (typeof window !== 'undefined') {

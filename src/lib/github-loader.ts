@@ -1,5 +1,5 @@
 import { SourceCodeEmbedding } from './../../node_modules/.prisma/client/index.d';
-//!imporoved branch handling 
+//!this file is gonna take a github URL and give us back the list of files in it 
 
 import { octokit } from './github';
 //this is gotta take a github URL and give us back the list of files in it
@@ -10,19 +10,56 @@ import { summariseCode , generateEmbedding } from './gemini';
 import { db } from '@/server/db';
 dotenv.config();
 
+// export const loadGithubRepo = async (githubUrl: string, githubToken?: string) => {
+//     const loader = new GithubRepoLoader(githubUrl, {
+//         accessToken: githubToken || process.env.GITHUB_TOKEN || '', //loading github token 
+//         branch: 'master',
+//         ignoreFiles: ['package-lock.json', 'yarn.lock', 'pnpm-lock.yaml', 'bun.lockb','.vscode'],
+//         recursive: true, //this will make sure we get every single file
+//         unknown: 'ignore', 
+//         maxConcurrency: 5 //this will make sure we don't overload the server
+//     });
+//     const docs = await loader.load();
+//     return docs;
+// };
+
+
 export const loadGithubRepo = async (githubUrl: string, githubToken?: string) => {
-    const loader = new GithubRepoLoader(githubUrl, {
-        accessToken: githubToken || process.env.GITHUB_TOKEN || '', //loading github token 
-        branch: 'master',
-        ignoreFiles: ['package-lock.json', 'yarn.lock', 'pnpm-lock.yaml', 'bun.lockb','.vscode'],
-        recursive: true, //this will make sure we get every single file
-        unknown: 'warn', //other is warn {this will give us a warning if we find a file that we don't know how to handle}
-        maxConcurrency: 5 //this will make sure we don't overload the server
-    });
-    const docs = await loader.load();
+    const accessToken = githubToken || process.env.GITHUB_TOKEN || '';
+    const branchesToTry = ['master', 'main']; // List of branches to try
+
+    let docs: Document[] | undefined;
+    let lastError: Error | undefined;
+
+    // Try each branch in sequence
+    for (const branch of branchesToTry) {
+        try {
+            const loader = new GithubRepoLoader(githubUrl, {
+                accessToken,
+                branch,
+                ignoreFiles: ['package-lock.json', 'yarn.lock', 'pnpm-lock.yaml', 'bun.lockb', '.vscode'],
+                recursive: true,
+                unknown: 'ignore',
+                maxConcurrency: 5,
+            });
+            docs = await loader.load();
+            break; // Exit the loop if loading succeeds
+        } catch (error) {
+            if (error instanceof Error) {
+                lastError = error; // Save the error and try the next branch
+            } else {
+                // Handle cases where the error is not an Error object
+                lastError = new Error('An unknown error occurred');
+            }
+        }
+    }
+
+    if (!docs) {
+        throw new Error(`Failed to load repository: ${lastError?.message || 'Unknown error'}`);
+    }
+
     return docs;
 };
-
 
 
 //console.log(await loadGithubRepo('https://github.com/SamikshaSingh25/tic-tac-toe')); //testing function to return the list of 
