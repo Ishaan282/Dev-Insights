@@ -24,7 +24,12 @@ const CommitLog = () => {
                     <div className="w-px translate-x-1 bg-gray-200"></div>
 
                     <>
-                    <img src={commit.commitAutherAvatar} alt="commit avatar" className='relative mt-4 size-8 flex-none rounded-full bg-gray-50'/>
+                    {/* <img src={commit.commitAutherAvatar} alt="commit avatar" className='relative mt-4 size-8 flex-none rounded-full bg-gray-50'/> */}
+                    <img
+                        src={commit.commitAutherAvatar || '/default-avatar.png'} // Fallback to a default avatar
+                        alt="commit avatar"
+                        className='relative mt-4 size-8 flex-none rounded-full bg-gray-50'
+                    />
                     <div className="flex-auto rounded-mg bg-white p-3 ring-1 ring-inset ring-gray-200">
                         <div className="flex justify-between gap-x-4">
                             <Link target='_blank' href={`${project?.githubUrl}/commit/${commit.commitHash}`} className='py-0.5 text-xs leading-5 text-gray-500'>
