@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { Sidebar, SidebarMenu , SidebarContent, SidebarGroupContent, SidebarHeader, SidebarGroup, SidebarGroupLabel, SidebarMenuItem, SidebarMenuButton, useSidebar } from '@/components/ui/sidebar'
@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import useProject from '@/hooks/use-project'
 import { Trash2 } from "lucide-react";
 
-//! this is the sidebar for the application
+// //! this is the sidebar for the application
 const items = [
 {
     title: 'Dashboard',
@@ -31,7 +31,8 @@ const items = [
 export function AppSidebar() {
     const pathname = usePathname()
     const {open} = useSidebar()
-    const {projects, projectId , setProjectId} = useProject();
+    const [showArchived, setShowArchived] = useState(false); // State for toggle
+    const {projects, projectId, setProjectId, archivedProjects} = useProject(showArchived);
     const router = useRouter();
 
     useEffect(() => {
@@ -85,30 +86,49 @@ export function AppSidebar() {
             <SidebarGroupContent>
                 {/*$ rendering the projects from backend  */}
                 <SidebarMenu>
-                    {projects?.map(project => {
-                        return (
-                            <SidebarMenuItem key={project.name}>
-                                <SidebarMenuButton asChild>
-                                    <div onClick = {() => {
-                                        setProjectId(project.id)
-                                    }}>
-                                        <div className={cn(
-                                            "rounded-sm border size-6 flex items-center justify-center text-sm bg-white text-primary w-5 h-5 min-w-5 min-h-5",
-                                            {
-                                                'bg-black border-primary text-white' : project.id === projectId  //if the project.id is selected then show the selected project
-                                            }
-                                        )}>
-                                            {project.name.charAt(0)} 
-                                        </div>
-                                        <span>{project.name}</span>
+                <div className="flex justify-center">
+                <Button 
+                    size="sm" 
+                    variant={showArchived ? 'default' : 'outline'}
+                    className={cn(
+                        "w-fit transition-colors",
+                        showArchived ? 'bg-green-500 hover:bg-green-600' : ''
+                    )}
+                    onClick={() => setShowArchived(!showArchived)}
+                    >
+                    {showArchived ? (
+                        <>
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        Hide Archived
+                        </>
+                    ) : (
+                        "View Archived Projects"
+                    )}
+                </Button>
+                </div>
 
-                                    </div>
-                                </SidebarMenuButton>
-
-                                
-                            </SidebarMenuItem>
-                        )
-                    })}
+                    {(showArchived ? archivedProjects : projects)?.map(project => (
+                        <SidebarMenuItem key={`${project.id}-${showArchived}`}>
+                        <SidebarMenuButton asChild>
+                            <div onClick={() => setProjectId(project.id)}>
+                            <div className={cn(
+                                "rounded-sm border size-6 flex items-center justify-center text-sm bg-white text-primary w-5 h-5 min-w-5 min-h-5",
+                                {
+                                'bg-black border-primary text-white': project.id === projectId,
+                                'opacity-70': showArchived
+                                }
+                            )}>
+                                {project.name.charAt(0)} 
+                            </div>
+                            <span className={cn({
+                                'line-through': showArchived
+                            })}>
+                                {project.name}
+                            </span>
+                            </div>
+                        </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    ))}
                     <div className="h-2"></div>
                     
                 {open && (
@@ -130,3 +150,4 @@ export function AppSidebar() {
     </Sidebar>
     )
 }
+

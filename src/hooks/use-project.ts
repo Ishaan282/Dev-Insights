@@ -1,19 +1,33 @@
-
+//!added archived projects
 import { api } from '@/trpc/react'
-import React from 'react'
-import { useLocalStorage} from 'usehooks-ts'
+import React, { useEffect } from 'react'
+import { useLocalStorage } from 'usehooks-ts'
 
-//function to get the project from the backend
-const useProject = () => {
-    const {data: projects} = api?.project?.getProjects?.useQuery() || {}
-    const [projectId , setProjectId] = useLocalStorage('devInsights_projectId', '') //storing in local state so it user closed the window and reopens it will continue from where it left
+const useProject = (showArchived: boolean) => {
+    // Active projects
+    const { data: projects } = api.project.getProjects.useQuery() || {}
+    
+    // Archived projects (only fetched when needed)
+    const { data: archivedProjects, refetch: refetchArchivedProjects } = api.project.getArchiveProjects.useQuery(undefined, {
+        enabled: showArchived // Enable query based on showArchived state
+    })
+    
+    const [projectId, setProjectId] = useLocalStorage('devInsights_projectId', '')
     const project = projects?.find(project => project.id === projectId)
+
+    useEffect(() => {
+        if (showArchived) {
+            refetchArchivedProjects()
+        }
+    }, [showArchived, refetchArchivedProjects])
+
     return {
         projects,
+        archivedProjects,
         project,
         projectId,
         setProjectId
-    } //calling the route to get projects
+    }
 }
 
 export default useProject

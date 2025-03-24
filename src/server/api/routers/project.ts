@@ -42,6 +42,21 @@ export const projectRouter = createTRPCRouter({
         })
     }),
 
+
+    //route 2.1 :- getting achived projects 
+    getArchiveProjects: protectedProcedure.query(async ({ctx}) => {
+        return await ctx.db.project.findMany({
+            where: {
+                userToProjects: {
+                    some: {
+                        userId: ctx.user.userId!
+                    }
+                },
+                deletedAt: {not : null} //only return soft deleted project 
+            }
+        })
+    }),
+
     //route 3 - for getting commits
     getCommits: protectedProcedure.input(z.object({
         projectId: z.string()
@@ -102,9 +117,30 @@ export const projectRouter = createTRPCRouter({
     getMeetings: protectedProcedure.input(z.object({ projectId: z.string()})).query(async ({ctx, input}) => {
         return await ctx.db.meeting.findMany({where: {projectId: input.projectId}, include: {issues: true} })
     }),
-    deleteMeeting: protectedProcedure.input(z.object({ meetingId: z.string()})).mutation(async ({ctx, input}) => {
-        return await ctx.db.meeting.delete({where: {id: input.meetingId}})
-    }),
+    // deleteMeeting: protectedProcedure.input(z.object({ meetingId: z.string()})).mutation(async ({ctx, input}) => {
+    //     return await ctx.db.meeting.delete({where: {id: input.meetingId}})
+    // }),
+
+    deleteMeeting: protectedProcedure
+        .input(z.object({ meetingId: z.string() }))
+        .mutation(async ({ ctx, input }) => {
+            // Step 1: Delete all issues associated with this meeting
+            await ctx.db.issue.deleteMany({
+            where: {
+                meetingId: input.meetingId
+            }
+            });
+
+            // Step 2: Delete the meeting itself
+            const deletedMeeting = await ctx.db.meeting.delete({
+            where: {
+                id: input.meetingId
+            }
+            });
+
+            return deletedMeeting;
+        }),
+
     getMeetingById: protectedProcedure.input(z.object({ meetingId: z.string()})).query(async ({ctx, input}) => {
         return await ctx.db.meeting.findUnique({where: {id: input.meetingId}, include: {issues: true}})
     }),
