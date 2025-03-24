@@ -66,23 +66,35 @@ export async function summariseCode(doc: Document){
         const code = doc.pageContent.slice(0, 10000); //limit the file to 10k characters
         const response = await model.generateContent([
             `
-            You are a senior software engineer specializing in onboarding junior developers.  
-            Your task is to help a junior engineer understand the purpose and functionality of the file: "${doc.metadata.source}".  
-    
-            Below is the code from the file:  
+ You are a senior software engineer responsible for guiding junior developers.  
+            Your task is to analyze and summarize the purpose and functionality of the following file: "${doc.metadata.source}".  
+            
+            **Project Context:**  
+            - This file is part of a larger software project.  
+            - If the file appears to be a module, utility, or component, infer how it fits into a larger system.  
+            - If relevant, describe its dependencies or interactions with other parts of the project.  
+            
+            **File Details:**  
+            Below is the content of the file:  
             ---  
             ${code}  
             ---  
-    
+            
             **Task:**  
-            Summarize the purpose and functionality of this file in simple, clear terms.  
-            Your summary should:  
-            1. Explain the file's role in the project.  
-            2. Highlight its key functions or components.  
-            3. Mention any important dependencies (if applicable).  
-            4. Keep it concise (preferably under 150 words, but expand slightly if necessary for clarity).   
-    
-            Provide a clear, structured response.
+            Provide a clear, structured summary that includes:  
+            1. The primary purpose of this file in the project.  
+            2. Key functions, classes, or components it defines.  
+            3. How it interacts with other files, services, or external dependencies (if applicable).  
+            4. Any important patterns, frameworks, or libraries used.  
+            
+            **Format the response as follows:**  
+            **File Summary:** [Brief high-level overview]  
+            **Key Functions/Components:** [List with explanations]  
+            **Dependencies & Interactions:** [Explain if applicable]  
+            
+            Keep the summary concise (preferably under 150 words, but allow slight expansion for clarity).  
+            If any part of the file is unclear due to missing context, make an educated guess based on best practices.
+          
             `
         ]);
     
@@ -108,3 +120,25 @@ export async function generateEmbedding(summary: string){
 }
 
 //console.log(await generateEmbedding("hello world")); //#testing the function 
+
+
+
+//!da prompt 
+
+// You are a senior software engineer specializing in onboarding junior developers.  
+// Your task is to help a junior engineer understand the purpose and functionality of the file: "${doc.metadata.source}".  
+
+// Below is the code from the file:  
+// ---  
+// ${code}  
+// ---  
+
+// **Task:**  
+// Summarize the purpose and functionality of this file in simple, clear terms.  
+// Your summary should:  
+// 1. Explain the file's role in the project.  
+// 2. Highlight its key functions or components.  
+// 3. Mention any important dependencies (if applicable).  
+// 4. Keep it concise (preferably under 150 words, but expand slightly if necessary for clarity).   
+
+// Provide a clear, structured response.

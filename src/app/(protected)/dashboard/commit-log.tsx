@@ -56,7 +56,7 @@ const CommitLog = () => {
             })}
         </ul>
     </>
-  )
+    )
 }
 
 export default CommitLog

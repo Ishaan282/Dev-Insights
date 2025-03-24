@@ -54,8 +54,19 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Supabase configuration
-const supabaseUrl = 'https://qgszbbmplmcfexiwvwin.supabase.co'; // Your Supabase URL
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFnc3piYm1wbG1jZmV4aXd2d2luIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzOTY0OTQsImV4cCI6MjA1Nzk3MjQ5NH0.XnT3ShfLDNxXyCodyH2nUAbjqCg2cQZNzNgJAjLjgh0'; // Your Supabase anon/public key
+require('dotenv').config();
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY ;
+
+if (!supabaseUrl || !supabaseKey) {
+    throw new Error("Missing Supabase credentials in environment variables");
+}
+
+// console.log("Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL);
+// console.log("Supabase Key:", process.env.NEXT_PUBLIC_SUPABASE_KEY ? "Loaded" : "Missing");
+
+
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export const storage = supabase.storage;

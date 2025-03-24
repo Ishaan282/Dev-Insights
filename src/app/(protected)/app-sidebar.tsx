@@ -1,15 +1,14 @@
 'use client'
 import React, { useEffect } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Sidebar, SidebarMenu , SidebarContent, SidebarGroupContent, SidebarHeader, SidebarGroup, SidebarGroupLabel, SidebarMenuItem, SidebarMenuButton, useSidebar } from '@/components/ui/sidebar'
 import { LayoutDashboard, Bot, Presentation, CreditCard , Plus} from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import useProject from '@/hooks/use-project'
 import { Trash2 } from "lucide-react";
-import { useRouter } from 'next/navigation';
-import router from 'next/router'
+
 //! this is the sidebar for the application
 const items = [
 {
@@ -26,7 +25,6 @@ const items = [
     icon: Presentation,},
 // {
 //     title: 'Billing',
-//     url: '/billing',
 //     icon: CreditCard,},
 ]
 
@@ -34,6 +32,7 @@ export function AppSidebar() {
     const pathname = usePathname()
     const {open} = useSidebar()
     const {projects, projectId , setProjectId} = useProject();
+    const router = useRouter();
 
     useEffect(() => {
         // Check if there are no projects and the user is not on the /create route
@@ -41,7 +40,6 @@ export function AppSidebar() {
             router.push('/create'); //# Redirect to /create
         }
     }, [projects, pathname, router]);
-
 
     return (
         //! logo
@@ -61,7 +59,7 @@ export function AppSidebar() {
         <SidebarContent >
         {/* first sidebar group */}
         <SidebarGroup>
-        <SidebarGroupLabel>Application</SidebarGroupLabel>
+            <SidebarGroupLabel>Application</SidebarGroupLabel>
             <SidebarGroupContent>
                 <SidebarMenu>
                     {items.map((item) => (
@@ -97,7 +95,6 @@ export function AppSidebar() {
                                         <div className={cn(
                                             "rounded-sm border size-6 flex items-center justify-center text-sm bg-white text-primary w-5 h-5 min-w-5 min-h-5",
                                             {
-                                                // 'bg-black border-primary text-white': true
                                                 'bg-black border-primary text-white' : project.id === projectId  //if the project.id is selected then show the selected project
                                             }
                                         )}>
@@ -129,7 +126,6 @@ export function AppSidebar() {
                 </SidebarMenu>
             </SidebarGroupContent>
         </SidebarGroup>
-
         </SidebarContent>
     </Sidebar>
     )
