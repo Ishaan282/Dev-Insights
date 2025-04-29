@@ -3,7 +3,7 @@ import { api } from '@/trpc/react'
 import React, { useEffect } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 
-const useProject = (showArchived: boolean) => {
+const useProject = (showArchived: boolean = false) => {
     // Active projects
     const { data: projects } = api.project.getProjects.useQuery() || {}
     

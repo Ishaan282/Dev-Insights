@@ -94,7 +94,7 @@ export async function summariseCode(doc: Document){
             
             Keep the summary concise (preferably under 150 words, but allow slight expansion for clarity).  
             If any part of the file is unclear due to missing context, make an educated guess based on best practices.
-          
+        
             `
         ]);
     
