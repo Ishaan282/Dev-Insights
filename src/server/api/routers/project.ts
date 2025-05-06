@@ -145,7 +145,7 @@ export const projectRouter = createTRPCRouter({
         return await ctx.db.meeting.findUnique({where: {id: input.meetingId}, include: {issues: true}})
     }),
 
-//! more routes 
+//! archive project & team collaborators
     //route 6
     archiveProject: protectedProcedure.input(z.object({projectId:z.string()})).mutation(async ({ctx, input}) => {
         return await ctx.db.project.update({ where: {id: input.projectId}, data: {deletedAt: new Date()}})
@@ -158,26 +158,12 @@ export const projectRouter = createTRPCRouter({
     //route 7
     getTeamMembers: protectedProcedure.input(z.object({projectId: z.string()})).query(async ({ctx,input}) => {
         return await ctx.db.userToProject.findMany({where: { projectId: input.projectId}, include: {user: true} })
+    }),
+
+//! billing routes
+    getMyCredits: protectedProcedure.query(async ({ctx}) => {
+        return await ctx.db.user.findUnique({where: {id: ctx.user.userId!}, select: {credits: true}})
     })
 
-//# delete project
-// deleteProject: protectedProcedure
-//     .input(z.object({ projectId: z.string() }))
-//     .mutation(async ({ ctx, input }) => {
-//         const { projectId } = input;
 
-//         try {
-//             const deletedProject = await ctx.db.project.delete({
-//                 where: { id: projectId },
-//             });
-//             return { success: true, deletedProject };
-//         } catch (error) {
-//             // Narrow down the type of `error` before accessing its properties
-//             if (error instanceof Error) {
-//                 throw new Error(`Failed to delete project: ${error.message}`);
-//             } else {
-//                 throw new Error(`Failed to delete project: An unknown error occurred`);
-//             }
-//         }
-//     }),
 }) //we create this router to have communication with frontend

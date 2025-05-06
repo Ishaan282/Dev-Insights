@@ -11,7 +11,7 @@ import { ExternalLink } from 'lucide-react'
 const CommitLog = () => {
     const { projectId, project} = useProject()
     const {data: commits} = api.project.getCommits.useQuery({projectId})
-  return (
+    return (
     <>
         <ul className="space-y-6">
             {commits?.map((commit , commitIdx) => {

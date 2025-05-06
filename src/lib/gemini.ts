@@ -9,7 +9,7 @@ if (!apiKey) {
 
 const genAI = new GoogleGenerativeAI(apiKey);
 const model = genAI.getGenerativeModel({
-    model: 'gemini-1.5-flash'
+    model: 'gemini-2.0-flash'
 });
 
 export const aisummariseCommit = async (diff: string) => {
@@ -54,7 +54,7 @@ export const aisummariseCommit = async (diff: string) => {
 //     diff --git a/Samiksha/decision_Tree.ipynb b/Samiksha/decision_Tree.py
 // similarity index 100%
 // rename from Samiksha/decision_Tree.ipynb
-// rename to Samiksha/decision_Tree.py
+// rename & edited to sami/decision_Tree.py
 //     `
 // ));
 
@@ -119,7 +119,7 @@ export async function generateEmbedding(summary: string){
     return embedding.values
 }
 
-//console.log(await generateEmbedding("hello world")); //#testing the function 
+// console.log(await generateEmbedding("hello world")); //#testing the function 
 
 
 

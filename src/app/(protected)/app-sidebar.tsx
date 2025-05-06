@@ -23,9 +23,10 @@ const items = [
     title: 'Meetings',
     url: '/meetings',
     icon: Presentation,},
-// {
-//     title: 'Billing',
-//     icon: CreditCard,},
+{
+    title: 'Billing',
+    url: '/billing',
+    icon: CreditCard,},
 ]
 
 export function AppSidebar() {
