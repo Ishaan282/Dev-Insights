@@ -8,20 +8,57 @@ import { Document } from '@langchain/core/documents'
 import dotenv from 'dotenv';
 import { summariseCode , generateEmbedding } from './gemini';
 import { db } from '@/server/db';
+import { Octokit } from 'octokit';
 dotenv.config();
 
-// export const loadGithubRepo = async (githubUrl: string, githubToken?: string) => {
-//     const loader = new GithubRepoLoader(githubUrl, {
-//         accessToken: githubToken || process.env.GITHUB_TOKEN || '', //loading github token 
-//         branch: 'master',
-//         ignoreFiles: ['package-lock.json', 'yarn.lock', 'pnpm-lock.yaml', 'bun.lockb','.vscode'],
-//         recursive: true, //this will make sure we get every single file
-//         unknown: 'ignore', 
-//         maxConcurrency: 5 //this will make sure we don't overload the server
-//     });
-//     const docs = await loader.load();
-//     return docs;
-// };
+const getFileCount = async (path: string, octokit: Octokit, githubOwner: string, githubRepo: string, acc: number = 0) => {
+    const { data } = await octokit.rest.repos.getContent({
+        owner: githubOwner,
+        repo: githubRepo,
+        path
+    })
+    // If it's a file (not an array), return acc + 1 since it's a single file
+    if(!Array.isArray(data) && data.type === 'file'){
+        return acc + 1
+    }
+    //if there are multiple files inside the folder 
+    if(Array.isArray(data)){
+        let fileCount = 0;
+        const directories : string[] = []
+
+        for(const item of data){
+            if(item.type === 'dir'){ // If item is a directory, add its path to the list
+                directories.push(item.path)
+            } else{
+                fileCount++
+            }
+        } //total files in a repo
+
+         // If there are subdirectories, recurse into each one using getFileCount
+        if(directories.length > 0){
+            const directoryCounts = await Promise.all(
+                directories.map(dirPath => getFileCount(dirPath, octokit, githubOwner, githubRepo, 0))
+                )
+                fileCount += directoryCounts.reduce((acc,count) => acc + count, 0)
+        }
+        return acc + fileCount
+        //if more than one directory 
+    }
+
+    return acc;
+}
+
+export const checkCredits = async (githubUrl: string, githubToken?: string) => {
+    //finding how mnay files in an repo 
+    const octokit = new Octokit({auth: githubToken || process.env.GITHUB_TOKEN})
+    const githubOwner = githubUrl.split('/')[3]
+    const githubRepo = githubUrl.split('/')[4]
+    if(!githubOwner || !githubRepo) {
+        return 0;
+    }
+    const fileCount = await getFileCount('',octokit, githubOwner, githubRepo,0)
+    return fileCount
+}
 
 
 export const loadGithubRepo = async (githubUrl: string, githubToken?: string) => {
@@ -61,8 +98,9 @@ export const loadGithubRepo = async (githubUrl: string, githubToken?: string) =>
     return docs;
 };
 
-
+//#test
 //console.log(await loadGithubRepo('https://github.com/SamikshaSingh25/tic-tac-toe')); //testing function to return the list of 
+
 export const indexGithubRepo = async(projectId: string,githubUrl: string, githubToken?: string) => {
     const docs = await loadGithubRepo(githubUrl, githubToken);
     const allEmbeddings = await generateEmbeddings(docs);
@@ -103,7 +141,7 @@ const generateEmbeddings = async (docs: Document[]) => {
     }))
 } //this gets the summary + embeds the summary to database
 
-//!format of each file returned 
+//!format of github files  
 // Document {
 //     pageContent: "# Rock-Paper-Scissors\nChallenge the Computer, Master Rock Paper Scissors!\n",
 //     metadata: {
@@ -115,5 +153,6 @@ const generateEmbeddings = async (docs: Document[]) => {
 //   },
 
 
-// console.log(await loadGithubRepo('https://github.com/SamikshaSingh25/tic-tac-toe')); //testing function to return the list of 
+//console.log(await loadGithubRepo('https://github.com/SamikshaSingh25/tic-tac-toe')); //testing function to return the list of 
 
+// console.log(process.env.GITHUB_TOKEN)
