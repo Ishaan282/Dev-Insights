@@ -1,5 +1,5 @@
 // test-supabase.js
-import { uploadFile } from './firebase'; // Import the uploadFile function
+import { uploadFile } from '../firebase'; // Import the uploadFile function
 import fs from 'fs'; // For reading files (if using a local file)
 import path from 'path'; // For handling file paths
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import { UserButton as Profile } from '@clerk/nextjs';
+import { UserButton} from '@clerk/nextjs';
 import {AppSidebar} from './app-sidebar';
 //# this file is the layout for the sidebar
 type Props = {
@@ -17,7 +17,10 @@ return (
             {/* top bar */}
             <div className="flex items-center gap-2 border-sidebar-border bg-sidebar border shadow rounded-md p-2 px-4">
                 <div className="ml-auto"></div>
-                <Profile />
+                {/* <UserButton /> */}
+                <UserButton 
+                    afterSignOutUrl="/sign-in" // This will properly clear session and redirect
+                />
             </div>
 
             <div className="h-4"></div> 

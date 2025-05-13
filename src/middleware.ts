@@ -1,3 +1,4 @@
+//purpose of this file to protect routes
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 
 //making sin sup routes public

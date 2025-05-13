@@ -1,5 +1,5 @@
 'use server'
-
+//stripe for doing payment
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import Stripe from 'stripe'

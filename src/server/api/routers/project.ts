@@ -1,4 +1,5 @@
-import { z } from 'zod';
+//this file handels project routes using trpc
+import { z } from 'zod'; //zod is used for validation
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc';
 import { pollCommits } from '@/lib/github';
 import { checkCredits, indexGithubRepo } from '@/lib/github-loader';
