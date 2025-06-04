@@ -186,5 +186,4 @@ export const projectRouter = createTRPCRouter({
         return {fileCount, userCredits: userCredits?.credits || 0}
     })
 
-
 }) //we create this router to have communication with frontend

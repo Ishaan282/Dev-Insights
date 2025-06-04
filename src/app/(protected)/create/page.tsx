@@ -30,6 +30,7 @@ const CreatePage = () => {
                 name: data.projectName,
                 githubToken: data.githubToken
             }, {
+
                 onSuccess: () => {
                     toast.success('Project created successfully')
                     refetch() //this will refresh the window to load new data

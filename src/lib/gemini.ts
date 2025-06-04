@@ -103,9 +103,6 @@ export async function summariseCode(doc: Document){
     } catch(error){
         return ''
     }
-
-
-
 }
 
 //!generating embaddings 
