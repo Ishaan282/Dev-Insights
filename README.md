@@ -6,18 +6,21 @@ DevInsights is an AI-powered web application designed to help developers efficie
 
 ## Features
 - **AI-Powered Commit Summaries**: Automatically generates concise summaries of code commits, reducing the need for manual review.
-- **Natural Language Code Search**: Enables developers to search for code snippets or logic using plain English.
+- **Natural Language Code Search with Vector Embedding**: Enables developers to search for code snippets or logic using plain English, powered by vector embeddings for improved accuracy.
 - **Meeting Summaries**: Stores and summarizes meeting recordings using Assembly AI.
 - **GitHub Integration**: Seamlessly links with GitHub repositories to fetch commit history and repository details.
 - **User Authentication**: Secure login and access control using Clerk.
+- **Billing & Subscription Management**: Integrated with Stripe for secure billing and credit system.
 - **Scalable Deployment**: Hosted on Vercel with serverless capabilities for high availability and performance.
 
 ## Technologies
 - **Frontend**: Next.js, ShadCN UI, Tailwind CSS 
 - **Backend**: Next.js, Bun, Clerk Auth, tRPC, Langchain
 - **AI APIs**: Google Gemini AI, Assembly AI, GitHub API
+- **Vector Embedding**: Used for enhanced natural language code search
 - **Database**: Neon Console (PostgreSQL), Supabase
 - **Authentication**: Clerk
+- **Billing**: Stripe
 - **Version Control**: Git & GitHub
 - **Deployment**: Vercel
 
@@ -33,22 +36,15 @@ DevInsights is an AI-powered web application designed to help developers efficie
     ```
 - Install dependencies:
     ```bash
-    npm install
+    bun install
     ```
 - Start the development server:
     ```bash
-    npm run dev
+    bun run dev
     ```
 
 - fill in the required values in .env
-    - GITHUB_TOKEN=''
-    - GEMINI_API_KEY=''
-
-    - NEXT_PUBLIC_SUPABASE_URL=
-    - NEXT_PUBLIC_SUPABASE_KEY=
-    - DATABASE_URL=""
-    - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
-    - CLERK_SECRET_KEY=
+    - refer to `.env.example` file  
 
 
 ## usage
@@ -96,6 +92,7 @@ DevInsights is an AI-powered web application designed to help developers efficie
 ## References
 - Next.js Documentation
 - Google Gemini AI
+- Assemly AI
 - GitHub API Documentation
 - Vercel Documentation
 - Neon PostgreSQL
