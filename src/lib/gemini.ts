@@ -48,15 +48,15 @@ export const aisummariseCommit = async (diff: string) => {
     return response.response.text();
 }
 
-//#testing function to get ai response
-// console.log(await aisummariseCommit(
-//     `
-//     diff --git a/Samiksha/decision_Tree.ipynb b/Samiksha/decision_Tree.py
-// similarity index 100%
-// rename from Samiksha/decision_Tree.ipynb
-// rename & edited to sami/decision_Tree.py
-//     `
-// ));
+// #testing function to get ai response
+console.log(await aisummariseCommit(
+    `
+    diff --git a/Samiksha/decision_Tree.ipynb b/Samiksha/decision_Tree.py
+similarity index 100%
+rename from Samiksha/decision_Tree.ipynb
+rename & edited to sami/decision_Tree.py
+    `
+));
 
 
 //!funciton to pass the code to ai
