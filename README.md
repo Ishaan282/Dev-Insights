@@ -98,3 +98,6 @@ DevInsights is an AI-powered web application designed to help developers efficie
 - Neon PostgreSQL
 - Clerk (User Authentication)
 - ShadCn UI Library
+
+## License
+© 2026 Ishaan Singla. Licensed under the Apache License, Version 2.0.
