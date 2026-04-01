@@ -75,20 +75,6 @@ DevInsights is an AI-powered web application designed to help developers efficie
     - Hosted on Vercel, ensuring high availability and fast performance.
     - Uses Neon Console (PostgreSQL) for efficient database management.
 
-## Disadvantages
-1. **AI Accuracy & Limitations**
-    - AI-generated summaries may not always be 100% accurate or capture the full context of changes.
-    - Natural language code search may struggle with complex queries or ambiguous phrasing.
-2. **Dependence on External APIs**
-    - Relies on Google Gemini AI and GitHub API, meaning service downtime or API rate limits could affect functionality.
-    - Potential API cost implications if usage scales up significantly.
-3. **Limited Offline Functionality**
-    - Since it’s a web-based platform, it requires an active internet connection.
-    - No local repository analysis without cloud-based access.
-4. **Learning Curve for Users**
-    - Developers unfamiliar with AI-powered tools might need time to adapt.
-    - Some may prefer traditional methods over AI-generated insights.
-
 ## References
 - Next.js Documentation
 - Google Gemini AI
