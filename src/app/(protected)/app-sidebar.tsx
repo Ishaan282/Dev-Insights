@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { Sidebar, SidebarMenu , SidebarContent, SidebarGroupContent, SidebarHeader, SidebarGroup, SidebarGroupLabel, SidebarMenuItem, SidebarMenuButton, useSidebar } from '@/components/ui/sidebar'
-import { LayoutDashboard, Bot, Presentation, CreditCard , Plus} from 'lucide-react'
+import { LayoutDashboard, Bot, Presentation, Plus} from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import useProject from '@/hooks/use-project'
@@ -23,10 +23,6 @@ const items = [
     title: 'Meetings',
     url: '/meetings',
     icon: Presentation,},
-{
-    title: 'Billing',
-    url: '/billing',
-    icon: CreditCard,},
 ]
 
 export function AppSidebar() {
