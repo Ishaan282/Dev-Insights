@@ -9,7 +9,7 @@ if (!apiKey) {
 
 const genAI = new GoogleGenerativeAI(apiKey);
 const model = genAI.getGenerativeModel({
-    model: 'gemini-3-flash-preview'
+    model: 'gemini-3.1-flash-lite-preview'
 });
 
 export const aisummariseCommit = async (diff: string) => {
@@ -48,15 +48,6 @@ export const aisummariseCommit = async (diff: string) => {
     return response.response.text();
 }
 
-// #testing function to get ai response
-console.log(await aisummariseCommit(
-    `
-    diff --git a/Samiksha/decision_Tree.ipynb b/Samiksha/decision_Tree.py
-similarity index 100%
-rename from Samiksha/decision_Tree.ipynb
-rename & edited to sami/decision_Tree.py
-    `
-));
 
 
 //!funciton to pass the code to ai
@@ -109,7 +100,7 @@ export async function summariseCode(doc: Document){
 //we generate the embedding of files using ai so when someone asks a question gemini wil look into embaddings 
 export async function generateEmbedding(summary: string){
     const model = genAI.getGenerativeModel({
-        model: "text-embedding-004"
+        model: "gemini-embedding-001"
     })
     const result = await model.embedContent(summary) //generating summary embeddings
     const embedding = result.embedding

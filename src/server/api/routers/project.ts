@@ -3,6 +3,8 @@ import { z } from 'zod'; //zod is used for validation
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc';
 import { pollCommits } from '@/lib/github';
 import { indexGithubRepo } from '@/lib/github-loader';
+import { unstable_cache, revalidateTag } from 'next/cache';
+import { db } from '@/server/db';
 
 export const projectRouter = createTRPCRouter({
     //route 1 - for creating a project
@@ -26,44 +28,51 @@ export const projectRouter = createTRPCRouter({
         })
         await indexGithubRepo(project.id, input.githubUrl, input.githubToken);
         await pollCommits(project.id);
+        revalidateTag(`projects-${ctx.user.userId}`);
+        revalidateTag(`commits-${project.id}`);
         return project
     }),
-    
+
     //route 2 - for getting all projects
     getProjects: protectedProcedure.query(async ({ctx}) => {
-        return await ctx.db.project.findMany({
-            where: {
-                userToProjects: {
-                    some: {
-                        userId: ctx.user.userId!
-                    }
-                },
-                deletedAt: null //if deleted at is null then only show the project
-            } //getting all projects of the user
-        })
+        const userId = ctx.user.userId!;
+        return unstable_cache(
+            () => db.project.findMany({
+                where: {
+                    userToProjects: { some: { userId } },
+                    deletedAt: null
+                }
+            }),
+            [`projects-${userId}`],
+            { tags: [`projects-${userId}`], revalidate: 300 }
+        )();
     }),
 
-
-    //route 2.1 :- getting achived projects 
+    //route 2.1 :- getting achived projects
     getArchiveProjects: protectedProcedure.query(async ({ctx}) => {
-        return await ctx.db.project.findMany({
-            where: {
-                userToProjects: {
-                    some: {
-                        userId: ctx.user.userId!
-                    }
-                },
-                deletedAt: {not : null} //only return soft deleted project 
-            }
-        })
+        const userId = ctx.user.userId!;
+        return unstable_cache(
+            () => db.project.findMany({
+                where: {
+                    userToProjects: { some: { userId } },
+                    deletedAt: { not: null }
+                }
+            }),
+            [`archive-projects-${userId}`],
+            { tags: [`projects-${userId}`], revalidate: 300 }
+        )();
     }),
 
     //route 3 - for getting commits
     getCommits: protectedProcedure.input(z.object({
         projectId: z.string()
     })).query(async ({ctx, input}) => {
-        pollCommits(input.projectId).then().catch(console.error); 
-        return await ctx.db.commit.findMany({where : {projectId : input.projectId}})
+        const { projectId } = input;
+        return unstable_cache(
+            () => db.commit.findMany({ where: { projectId } }),
+            [`commits-${projectId}`],
+            { tags: [`commits-${projectId}`], revalidate: 300 }
+        )();
     }),
 
     //route 4
@@ -149,16 +158,25 @@ export const projectRouter = createTRPCRouter({
 //! archive project & team collaborators
     //route 6
     archiveProject: protectedProcedure.input(z.object({projectId:z.string()})).mutation(async ({ctx, input}) => {
-        return await ctx.db.project.update({ where: {id: input.projectId}, data: {deletedAt: new Date()}})
-    }), //this is gonna delete the project
+        const result = await ctx.db.project.update({ where: {id: input.projectId}, data: {deletedAt: new Date()}});
+        revalidateTag(`projects-${ctx.user.userId}`);
+        return result;
+    }),
 
     unArchiveProject: protectedProcedure.input(z.object({projectId: z.string()})).mutation(async ({ctx,input}) => {
-        return await ctx.db.project.update({ where: {id: input.projectId}, data: {deletedAt: null}})
+        const result = await ctx.db.project.update({ where: {id: input.projectId}, data: {deletedAt: null}});
+        revalidateTag(`projects-${ctx.user.userId}`);
+        return result;
     }),
 
     //route 7
     getTeamMembers: protectedProcedure.input(z.object({projectId: z.string()})).query(async ({ctx,input}) => {
-        return await ctx.db.userToProject.findMany({where: { projectId: input.projectId}, include: {user: true} })
+        const { projectId } = input;
+        return unstable_cache(
+            () => db.userToProject.findMany({ where: { projectId }, include: { user: true } }),
+            [`team-${projectId}`],
+            { tags: [`team-${projectId}`], revalidate: 300 }
+        )();
     }),
 
 }) //we create this router to have communication with frontend

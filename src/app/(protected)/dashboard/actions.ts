@@ -34,7 +34,7 @@ export async function askQuestion(question: string, projectId: string){
 
     (async () => {
         const { textStream } = await streamText({
-            model: google('gemini-3-flash-preview'),
+            model: google('gemini-2.5-flash'),
             prompt: `
                 You are an AI code assistant that helps technical interns understand and navigate a codebase. Your responses should be friendly, knowledgeable, and detailed. Use markdown syntax and include code snippets when applicable.
 

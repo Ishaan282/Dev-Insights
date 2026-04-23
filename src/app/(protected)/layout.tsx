@@ -1,7 +1,8 @@
 import React from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import { UserButton} from '@clerk/nextjs';
 import {AppSidebar} from './app-sidebar';
+import UserButtonClient from './user-button-client';
+import { ThemeToggle } from '@/components/theme-toggle';
 //# this file is the layout for the sidebar
 type Props = {
     children: React.ReactNode; //# this is the children of the layout
@@ -17,10 +18,8 @@ return (
             {/* top bar */}
             <div className="flex items-center gap-2 border-sidebar-border bg-sidebar border shadow rounded-md p-2 px-4">
                 <div className="ml-auto"></div>
-                {/* <UserButton /> */}
-                <UserButton 
-                    afterSignOutUrl="/sign-in" // This will properly clear session and redirect
-                />
+                <ThemeToggle />
+                <UserButtonClient />
             </div>
 
             <div className="h-4"></div> 
