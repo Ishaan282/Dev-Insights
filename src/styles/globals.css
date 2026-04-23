@@ -43,75 +43,102 @@
   }
 
   .dark {
-    /*! YT  */
-    /* --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 08%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%; */
+    /* ─── Surface Stack (Material 3 tonal elevation) ───────────────────────
+       Each layer is ~3-4% lighter. No pure black. Blue-gray neutrals.
+       #0D1117 → #111823 → #172131 → #1E2A3B → #263347 (hover)
+    ──────────────────────────────────────────────────────────────────────── */
+    --background:   220 27% 7%;    /* #0D1117  app canvas  */
+    --card:         220 24% 13%;   /* #172131  card surface (+2 stops) */
+    --popover:      220 24% 15%;   /* #1B2639  popover (+1 stop above card) */
 
+    /* ─── Text ──────────────────────────────────────────────────────────────
+       Primary ~85% brightness — soft blue-white, not harsh white.
+       Contrast ~10:1 against bg. Eye-friendly for sustained reading.
+    ──────────────────────────────────────────────────────────────────────── */
+    --foreground:          215 22% 84%;   /* #CDD5DF  primary text */
+    --card-foreground:     215 22% 84%;
+    --popover-foreground:  215 22% 84%;
 
-    --background: 20 14.3% 4.1%;
-    --foreground: 0 0% 95%;
-    --card: 24 9.8% 10%;
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 9%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 142.1 70.6% 45.3%;
-    --primary-foreground: 144.9 80.4% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 12 6.5% 15.1%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 85.7% 97.3%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 142.4 71.8% 29.2%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    /* above part is copied from https://ui.shadcn.com/themes */
+    /* ─── Accent / Primary ──────────────────────────────────────────────────
+       Desaturated emerald. Same hue as light mode but pulled back to 44%
+       saturation so it reads "confident" not "neon".
+    ──────────────────────────────────────────────────────────────────────── */
+    --primary:             152 44% 46%;   /* #3AAE78  calm green */
+    --primary-foreground:  152 40% 8%;    /* #0D2218  text on green buttons */
+    --ring:                152 44% 40%;   /* focus rings */
 
+    /* ─── Secondary / Muted ─────────────────────────────────────────────────
+       Secondary = slightly elevated surface for chips, badges, secondary btns.
+       Muted = dimmed text, placeholders, captions.
+    ──────────────────────────────────────────────────────────────────────── */
+    --secondary:            220 20% 19%;  /* #222E3E  secondary btn / chip bg */
+    --secondary-foreground: 215 18% 72%;  /* #ABB8C9  text on secondary */
+    --muted:                220 20% 16%;  /* #1C2737  muted bg (code blocks) */
+    --muted-foreground:     215 14% 52%;  /* #7A8899  captions, placeholders */
 
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sudebar-primary: 244.3 76.3% 48%;
+    /* ─── Hover / Interactive surface ───────────────────────────────────────
+       Used by sidebar items, dropdown rows, table rows on hover.
+       Slightly lighter than card — creates "lift" on interaction.
+    ──────────────────────────────────────────────────────────────────────── */
+    --accent:               220 22% 20%;  /* #232E40  hover surface */
+    --accent-foreground:    215 22% 84%;  /* same as foreground */
+
+    /* ─── Semantic ───────────────────────────────────────────────────────── */
+    --destructive:          0 55% 38%;    /* #9E2B2B  red — not neon */
+    --destructive-foreground: 0 0% 94%;
+
+    /* ─── Borders & Inputs ───────────────────────────────────────────────── */
+    --border: 220 20% 20%;   /* #222E3A  subtle divider */
+    --input:  220 22% 17%;   /* #1D2A38  input bg, 1 stop above card */
+
+    /* ─── Charts ─────────────────────────────────────────────────────────── */
+    --chart-1: 220 65% 58%;
+    --chart-2: 152 52% 48%;
+    --chart-3: 35  72% 56%;
+    --chart-4: 270 55% 62%;
+    --chart-5: 340 62% 58%;
+
+    /* ─── Sidebar ─────────────────────────────────────────────────────────
+       1 stop darker than app background — creates clear left-rail depth.
+    ──────────────────────────────────────────────────────────────────────── */
+    --sidebar-background:        220 28% 9%;    /* #0F1720  sidebar canvas */
+    --sidebar-foreground:        215 18% 68%;   /* #A1AEBF  sidebar text */
+    --sidebar-primary:           152 44% 46%;   /* matches --primary */
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 3.7 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent:            220 22% 16%;   /* #1A2535  sidebar hover */
+    --sidebar-accent-foreground: 215 22% 84%;
+    --sidebar-border:            220 20% 14%;   /* #182030  sidebar divider */
+    --sidebar-ring:              152 44% 46%;
   }
 }
 
-@layer base{
+@layer base {
   * {
     @apply border-border;
   }
-  body{
+  body {
     @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Smooth theme switch — no jarring flash */
+  html {
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  /* Scrollbar styled to match dark surface stack */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/40;
   }
 }

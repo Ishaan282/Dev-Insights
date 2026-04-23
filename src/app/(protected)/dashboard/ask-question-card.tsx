@@ -1,6 +1,7 @@
-//!making a question card 
+//!making a question card
 'use client'
-import MDEditor from "@uiw/react-md-editor"; //to format the file output 
+import MDEditor from "@uiw/react-md-editor"; //to format the file output
+import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
@@ -17,6 +18,7 @@ import useRefetch from "@/hooks/use-refetch";
 
 const AskQuestionCard = () => {
     const {project} = useProject();
+    const { theme } = useTheme();
     const [open,setOpen] = React.useState(false);
     const [question, setQuestion] = React.useState('');
     const [loading, setLoading] = React.useState(false)
@@ -75,12 +77,12 @@ const AskQuestionCard = () => {
                         </div>
                     </DialogHeader>
 
-                    <MDEditor.Markdown source = {answer} className='max-w-[70vw] !h-full max-h-[30vh] overflow-y-scroll bg-white p-4 rounded-md'/>
-                    {/* <MDEditor.Markdown
-                        source={answer}
-                        className='max-w-[70vw] !h-full max-h-[30vh] overflow-y-scroll p-4 rounded-md'
-                        style={{ backgroundColor: 'white', color: 'black' }}
-                    /> */}
+                    <div data-color-mode={theme === 'dark' ? 'dark' : 'light'}>
+                        <MDEditor.Markdown
+                            source={answer}
+                            className="max-w-[70vw] !h-full max-h-[30vh] overflow-y-scroll rounded-md p-4 font-mono text-sm"
+                        />
+                    </div>
                     <div className="h-4"></div>
                     <CodeReferences filesReferences={filesReferences}/>
 

@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card'
 import { uploadFile } from '@/lib/firebase'
 import { Presentation, Upload } from 'lucide-react'
 import React from 'react'
+import { useTheme } from 'next-themes'
 import { useDropzone } from 'react-dropzone'
 import {CircularProgressbar, buildStyles} from 'react-circular-progressbar' //it's used to show the progress of the upload
 import { api } from '@/trpc/react'
@@ -15,6 +16,7 @@ import { useMutation } from '@tanstack/react-query'
 
 const MeetingCard = () => {
     const { project } = useProject();
+    const { theme } = useTheme();
     const processMeeting = useMutation({ mutationFn: async (data: {meetingUrl : string, meetingId: string, projectId: string}) => {
         const {meetingUrl, meetingId, projectId} = data
         const response = await axios.post('/api/process-meeting', { meetingUrl, meetingId, projectId });
@@ -64,10 +66,10 @@ const MeetingCard = () => {
                 // if nothing is uploading then show this 
                 <>
                     <Presentation className = "h-10 w-10 animate-bounce" />
-                    <h3 className="ht-2 text-sm font-semibold text-gray-900">
+                    <h3 className="mt-2 text-sm font-semibold text-foreground">
                         Create a new meeting
                     </h3>
-                    <p className="mt-1 text-center text-sm text-gray-500">
+                    <p className="mt-1 text-center text-sm text-muted-foreground">
                         Analyse your meeting with ourTool.
                         <br />
                         Powered by AI.
@@ -87,12 +89,12 @@ const MeetingCard = () => {
                 {/* <div> */}
                     <CircularProgressbar value={progress} text={`${progress}%`} className='size-20' styles={
                         buildStyles({
-                            pathColor: '#10B981', // Green color for the progress bar
-                            textColor: '#10B981', // Green color for the text
-                            trailColor: '#D1FAE5', // Light green color for the trail
+                            pathColor: '#10B981',
+                            textColor: '#10B981',
+                            trailColor: theme === 'dark' ? '#1a2e24' : '#D1FAE5',
                         })
                     }/>
-                    <p className="text-sm text-gray-500 text-center">Uploading your meeting...</p>
+                    <p className="text-sm text-muted-foreground text-center">Uploading your meeting...</p>
                 </div>
             )}
 
