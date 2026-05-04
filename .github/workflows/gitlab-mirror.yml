@@ -16,7 +16,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Push to GitLab
+      - name: Configure Git identity
         run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Add or update GitLab remote
+        run: |
+          git remote remove gitlab 2>/dev/null || true
           git remote add gitlab https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/Ishaan282/Dev-Insights.git
+
+      - name: Mirror push to GitLab
+        run: |
           git push --mirror gitlab
